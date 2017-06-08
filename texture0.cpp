@@ -10,20 +10,66 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 using namespace std;
-
-static const int NUM_TRIANGLES = 1;
 
 static const struct
 {
     GLfloat x, y, z; // position in R^3
     GLfloat r, g, b; // color
-} triangles[3*NUM_TRIANGLES] =
+    GLfloat nx, ny, nz; // normal vector
+    GLfloat tu, tv; // texture coordinates
+} cube[36] =
 {
-    { -0.5f, -0.289, 0.0f, 1.0f, 0.0f, 0.0f },
-    {  0.5f, -0.289f, 0.0f, 0.0f, 1.0f, 0.0f },
-    {  0.0f,  0.577f, 0.0f, 0.0f, 0.0f, 1.0f }
+    // top (if +z is up, +y is right, +x is forward)
+    {  1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f },
+    {  -1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f },
+    {  -1.0f, -1.0f, 1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f },
+    {  1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f },
+    {  -1.0f, -1.0f, 1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f },
+    {  1.0f, -1.0f, 1.0f,   1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f },
+
+    // bottom
+    {  1.0f, 1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f },
+    {  1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f },
+    {  -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f },
+    {  1.0f, 1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f },
+    {  -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f },
+    {  -1.0f, 1.0f, -1.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f },
+
+    // right
+    {  1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 1.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f },
+    {  1.0f, 1.0f, -1.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f },
+    {  -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f },
+    {  1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 1.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f },
+    {  -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f },
+    {  -1.0f, 1.0f, 1.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f },
+
+    // left
+    {  1.0f, -1.0f, 1.0f,   1.0f, 1.0f, 0.0f,  0.0f, -1.0f, 0.0f,  1.0f, 0.0f },
+    {  -1.0f, -1.0f, 1.0f,  1.0f, 1.0f, 0.0f,  0.0f, -1.0f, 0.0f,  0.0f, 0.0f },
+    {  -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f,  0.0f, -1.0f, 0.0f,  0.0f, 1.0f },
+    {  1.0f, -1.0f, 1.0f,   1.0f, 1.0f, 0.0f,  0.0f, -1.0f, 0.0f,  1.0f, 0.0f },
+    {  -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f,  0.0f, -1.0f, 0.0f,  0.0f, 1.0f },
+    {  1.0f, -1.0f, -1.0f,  1.0f, 1.0f, 0.0f,  0.0f, -1.0f, 0.0f,  1.0f, 1.0f },
+
+    // front
+    {  1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f },
+    {  1.0f, -1.0f, 1.0f,  1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f },
+    {  1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f },
+    {  1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f },
+    {  1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f },
+    {  1.0f, 1.0f, -1.0f,  1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f },
+
+    // back
+    {  -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 1.0f,  -1.0f, 0.0f, 0.0f,  0.0f, 0.0f },
+    {  -1.0f, 1.0f, -1.0f,  0.0f, 1.0f, 1.0f,  -1.0f, 0.0f, 0.0f,  0.0f, 1.0f },
+    {  -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 1.0f,  -1.0f, 0.0f, 0.0f,  1.0f, 1.0f },
+    {  -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 1.0f,  -1.0f, 0.0f, 0.0f,  0.0f, 0.0f },
+    {  -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 1.0f,  -1.0f, 0.0f, 0.0f,  1.0f, 1.0f },
+    {  -1.0f, -1.0f, 1.0f,  0.0f, 1.0f, 1.0f,  -1.0f, 0.0f, 0.0f,  1.0f, 0.0f }
 };
 
 static void errorCallback(int error, const char* description)
@@ -113,7 +159,7 @@ int main(void)
     GLuint vertexBuffer, vertexShader, fragmentShader, program;
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangles), triangles, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
 
     // Read shaders from files, compile them, and check for errors
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -142,15 +188,20 @@ int main(void)
 
     glEnableVertexAttribArray(vposLocation);
     glVertexAttribPointer(vposLocation, 3, GL_FLOAT, GL_FALSE,
-                          sizeof(triangles[0]), (GLvoid*) 0);
+                          sizeof(cube[0]), (GLvoid*) 0);
     glEnableVertexAttribArray(vcolLocation);
     glVertexAttribPointer(vcolLocation, 3, GL_FLOAT, GL_FALSE,
-                          sizeof(triangles[0]), (GLvoid*) (sizeof(GLfloat) * 3));
+                          sizeof(cube[0]), (GLvoid*) (sizeof(GLfloat) * 3));
+
+    // Load textures
+    int tWidth, tHeight, tComps;
+    unsigned char *tData = stbi_load("westley.png", &tWidth, &tHeight, &tComps, 0);
+    // TODO: process the texture data
 
     glEnable(GL_DEPTH_TEST);
 
     glm::mat4 M, V, P, MVP;
-    glm::vec3 eye = glm::vec3(0.0, 0.0, 5.0);
+    glm::vec3 eye = glm::vec3(0.0, 5.0, 15.0);
     glm::vec3 center = glm::vec3(0.0, 0.0, 0.0);
     glm::vec3 up = glm::vec3(0.0, 1.0, 0.0);
     V = glm::lookAt(eye, center, up);
@@ -171,7 +222,7 @@ int main(void)
 
         glUseProgram(program);
         glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(MVP));
-        glDrawArrays(GL_TRIANGLES, 0, 3*NUM_TRIANGLES);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // check for OpenGL errors
         GLenum error_code;
