@@ -210,23 +210,26 @@ int main(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-/*    unsigned char *tData = stbi_load("dip.png", &tWidth, &tHeight, &tComps, 0);
+   unsigned char *tData = stbi_load("dip.png", &tWidth, &tHeight, &tComps, 0);
     if (tData == NULL) {
         cerr << "Problem reading file " << "dip.png" << "." << endl;
     }
     else {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tWidth, tHeight, 0, GL_RGB,
                      GL_UNSIGNED_BYTE, tData);
+        glGenerateMipmap(GL_TEXTURE_2D);
         cout << "size of array: " << sizeof(tData) << endl
             << "tWidth = " << tWidth << endl
             << "tHeight = " << tHeight << endl
             << "tComps = " << tComps << endl;
     }
     stbi_image_free(tData);
-*/
-    float tData[] = { 1.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
+
+/*    float tData[] = { 1.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
     1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 0.0f};
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, tData);
+    glGenerateMipmap(GL_TEXTURE_2D);
+*/
     //glUniform1i(texLocation, 0);
 
     glEnable(GL_DEPTH_TEST);
