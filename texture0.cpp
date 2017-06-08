@@ -164,12 +164,13 @@ int main(void)
     // Read shaders from files, compile them, and check for errors
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    compileShader(vertexShader, "simple.vert");   // Here is where we are assuming
-    compileShader(fragmentShader, "simple.frag"); // an in-tree build.
+    compileShader(vertexShader, "textured.vert");   // Here is where we are assuming
+    compileShader(fragmentShader, "textured.frag"); // an in-tree build.
 
     program = glCreateProgram();
     glAttachShader(program, vertexShader);
     glAttachShader(program, fragmentShader);
+    glBindFragDataLocation(program, 0, "fragColor");
     glLinkProgram(program);
     GLint success = 0;
     glGetProgramiv(program, GL_LINK_STATUS, &success);
@@ -183,8 +184,10 @@ int main(void)
     glDeleteShader(fragmentShader);
 
     GLint mvpLocation = glGetUniformLocation(program, "MVP");
+    GLint texLocation = glGetUniformLocation(program, "tex");
     GLint vposLocation = glGetAttribLocation(program, "vPos");
     GLint vcolLocation = glGetAttribLocation(program, "vCol");
+    GLint tcLocation = glGetAttribLocation(program, "tc");
 
     glEnableVertexAttribArray(vposLocation);
     glVertexAttribPointer(vposLocation, 3, GL_FLOAT, GL_FALSE,
@@ -192,11 +195,39 @@ int main(void)
     glEnableVertexAttribArray(vcolLocation);
     glVertexAttribPointer(vcolLocation, 3, GL_FLOAT, GL_FALSE,
                           sizeof(cube[0]), (GLvoid*) (sizeof(GLfloat) * 3));
+    glEnableVertexAttribArray(tcLocation);
+    glVertexAttribPointer(tcLocation, 2, GL_FLOAT, GL_FALSE,
+                          sizeof(cube[0]), (GLvoid*) (sizeof(GLfloat) * 9));
 
     // Load textures
     int tWidth, tHeight, tComps;
-    unsigned char *tData = stbi_load("westley.png", &tWidth, &tHeight, &tComps, 0);
-    // TODO: process the texture data
+    GLuint dipTexture;
+    //glActiveTexture(GL_TEXTURE0);
+    glGenTextures(1, &dipTexture);
+    glBindTexture(GL_TEXTURE_2D, dipTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+/*    unsigned char *tData = stbi_load("dip.png", &tWidth, &tHeight, &tComps, 0);
+    if (tData == NULL) {
+        cerr << "Problem reading file " << "dip.png" << "." << endl;
+    }
+    else {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tWidth, tHeight, 0, GL_RGB,
+                     GL_UNSIGNED_BYTE, tData);
+        cout << "size of array: " << sizeof(tData) << endl
+            << "tWidth = " << tWidth << endl
+            << "tHeight = " << tHeight << endl
+            << "tComps = " << tComps << endl;
+    }
+    stbi_image_free(tData);
+*/
+    float tData[] = { 1.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 0.0f};
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, tData);
+    //glUniform1i(texLocation, 0);
 
     glEnable(GL_DEPTH_TEST);
 
