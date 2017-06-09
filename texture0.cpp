@@ -24,18 +24,18 @@ static const struct
 } cube[36] =
 {
     // top (if +z is up, +y is right, +x is forward)
-    {  1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f },
-    {  -1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f },
-    {  -1.0f, -1.0f, 1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f },
-    {  1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f },
-    {  -1.0f, -1.0f, 1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f },
-    {  1.0f, -1.0f, 1.0f,   1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f },
+    {  1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f },
+    {  -1.0f, 1.0f, 1.0f,   1.0f, 1.0f, 1.0f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f },
+    {  -1.0f, -1.0f, 1.0f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f },
+    {  1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f },
+    {  -1.0f, -1.0f, 1.0f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f },
+    {  1.0f, -1.0f, 1.0f,   1.0f, 1.0f, 1.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f },
 
     // bottom
-    {  1.0f, 1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f },
+    {  1.0f, 1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  1.0f, 0.0f },
     {  1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f },
     {  -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f },
-    {  1.0f, 1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f },
+    {  1.0f, 1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  1.0f, 0.0f },
     {  -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f },
     {  -1.0f, 1.0f, -1.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f },
 
@@ -56,12 +56,12 @@ static const struct
     {  1.0f, -1.0f, -1.0f,  1.0f, 1.0f, 0.0f,  0.0f, -1.0f, 0.0f,  1.0f, 1.0f },
 
     // front
-    {  1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f },
+    {  1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f },
     {  1.0f, -1.0f, 1.0f,  1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f },
     {  1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f },
-    {  1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f },
+    {  1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f },
     {  1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f },
-    {  1.0f, 1.0f, -1.0f,  1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f },
+    {  1.0f, 1.0f, -1.0f,  1.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f },
 
     // back
     {  -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 1.0f,  -1.0f, 0.0f, 0.0f,  0.0f, 0.0f },
@@ -184,7 +184,6 @@ int main(void)
     glDeleteShader(fragmentShader);
 
     GLint mvpLocation = glGetUniformLocation(program, "MVP");
-    GLint texLocation = glGetUniformLocation(program, "tex");
     GLint vposLocation = glGetAttribLocation(program, "vPos");
     GLint vcolLocation = glGetAttribLocation(program, "vCol");
     GLint tcLocation = glGetAttribLocation(program, "tc");
@@ -202,35 +201,27 @@ int main(void)
     // Load textures
     int tWidth, tHeight, tComps;
     GLuint dipTexture;
-    //glActiveTexture(GL_TEXTURE0);
     glGenTextures(1, &dipTexture);
+    glActiveTexture(GL_TEXTURE0);
+    glUseProgram(program);
+    glUniform1i(glGetUniformLocation(program, "tex0"), 0);
     glBindTexture(GL_TEXTURE_2D, dipTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-   unsigned char *tData = stbi_load("dip.png", &tWidth, &tHeight, &tComps, 0);
+    unsigned char *tData = stbi_load("dip.jpg", &tWidth, &tHeight, &tComps, 0);
     if (tData == NULL) {
-        cerr << "Problem reading file " << "dip.png" << "." << endl;
+        cerr << "Problem reading file " << "dip.jpg" << "." << endl;
     }
     else {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tWidth, tHeight, 0, GL_RGB,
                      GL_UNSIGNED_BYTE, tData);
         glGenerateMipmap(GL_TEXTURE_2D);
-        cout << "size of array: " << sizeof(tData) << endl
-            << "tWidth = " << tWidth << endl
-            << "tHeight = " << tHeight << endl
-            << "tComps = " << tComps << endl;
     }
     stbi_image_free(tData);
 
-/*    float tData[] = { 1.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 0.0f};
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, tData);
-    glGenerateMipmap(GL_TEXTURE_2D);
-*/
-    //glUniform1i(texLocation, 0);
 
     glEnable(GL_DEPTH_TEST);
 
