@@ -162,6 +162,7 @@ int main(void)
     }
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+    glUseProgram(program);
 
     GLint l_MVP = glGetUniformLocation(program, "MVP");
     GLint l_vPos = glGetAttribLocation(program, "vPos");
@@ -190,7 +191,6 @@ int main(void)
     GLuint dipTexture;
     glGenTextures(1, &dipTexture);
     glActiveTexture(GL_TEXTURE0);
-    glUseProgram(program);
     glUniform1i(glGetUniformLocation(program, "tex0"), 0);
     glBindTexture(GL_TEXTURE_2D, dipTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -233,7 +233,6 @@ int main(void)
         M = rotate(mat4(1.0f), (float) glfwGetTime(), vec3(0.0f, 0.0f, 1.0f));
         MVP = P * V * M;
 
-        glUseProgram(program);
         glUniformMatrix4fv(l_MVP, 1, GL_FALSE, value_ptr(MVP));
         glDrawElements(GL_TRIANGLES, cube_idx.size(), GL_UNSIGNED_INT, 0);
         // check for OpenGL errors
