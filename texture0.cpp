@@ -229,7 +229,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         ratio = width / (float) height;
-        P = perspective(0.50f, ratio, 1.0f, 100.0f);
+        P = perspective(0.60f, ratio, 1.0f, 100.0f);
         M = rotate(mat4(1.0f), (float) glfwGetTime(), vec3(0.0f, 0.0f, 1.0f));
         MVP = P * V * M;
 
