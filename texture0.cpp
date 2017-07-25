@@ -1,11 +1,11 @@
 /*===================================================
 // Skeleton Project for CS-150: 3D Computer Graphics
+// Uses textures.
 //===================================================*/
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <fstream>
 #include <array>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -178,10 +178,12 @@ int main(void)
     glBufferData(GL_ARRAY_BUFFER, cube.size()*sizeof(Vertex), cube.data(), GL_STATIC_DRAW);
     glEnableVertexAttribArray(l_vPos);
     glVertexAttribPointer(l_vPos, 3, GL_FLOAT, GL_FALSE,
-                          sizeof(Vertex), (GLvoid*) 0);
+                          sizeof(Vertex), // stride
+                          reinterpret_cast<const GLvoid*>(0) ); // offset
     glEnableVertexAttribArray(l_tc);
     glVertexAttribPointer(l_tc, 2, GL_FLOAT, GL_FALSE,
-                          sizeof(Vertex), (GLvoid*) (3*sizeof(float)));
+                          sizeof(Vertex),
+                          reinterpret_cast<const GLvoid*>(3*sizeof(float)));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, cube_idx.size()*sizeof(GLuint),
                  cube_idx.data(), GL_STATIC_DRAW);
@@ -228,9 +230,10 @@ int main(void)
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        ratio = width / (float) height;
+        ratio = static_cast<float>(width) / static_cast<float>(height);
         P = perspective(0.60f, ratio, 1.0f, 100.0f);
-        M = rotate(mat4(1.0f), (float) glfwGetTime(), vec3(0.0f, 0.0f, 1.0f));
+        M = rotate(mat4(1.0f), static_cast<float>(glfwGetTime()),
+                        vec3(0.0f, 0.0f, 1.0f));
         MVP = P * V * M;
 
         glUniformMatrix4fv(l_MVP, 1, GL_FALSE, value_ptr(MVP));
