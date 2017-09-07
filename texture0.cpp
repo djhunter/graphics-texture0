@@ -11,7 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include <stb_image.h> // for reading image files
 
 using namespace std;
 using namespace glm;
@@ -191,22 +191,23 @@ int main(void)
     // Load textures
     int tWidth, tHeight, tComps;
     GLuint dipTexture;
-    glGenTextures(1, &dipTexture);
-    glActiveTexture(GL_TEXTURE0);
+    glGenTextures(1, &dipTexture); // generate texture names
+    glActiveTexture(GL_TEXTURE0); // texture unit for tex0
     glUniform1i(glGetUniformLocation(program, "tex0"), 0);
-    glBindTexture(GL_TEXTURE_2D, dipTexture);
+    glBindTexture(GL_TEXTURE_2D, dipTexture); // bind dipTexture to active texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    // read the image file
     unsigned char *tData = stbi_load("dip.jpg", &tWidth, &tHeight, &tComps, 0);
     if (tData == NULL) {
         cerr << "Problem reading file " << "dip.jpg" << "." << endl;
     }
     else {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tWidth, tHeight, 0, GL_RGB,
-                     GL_UNSIGNED_BYTE, tData);
+                     GL_UNSIGNED_BYTE, tData); // send image to shaders
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     stbi_image_free(tData);
@@ -229,6 +230,7 @@ int main(void)
         glfwGetFramebufferSize(window, &width, &height);
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glBindTexture(GL_TEXTURE_2D, dipTexture); // select texture to use
 
         ratio = static_cast<float>(width) / static_cast<float>(height);
         P = perspective(0.60f, ratio, 1.0f, 100.0f);
